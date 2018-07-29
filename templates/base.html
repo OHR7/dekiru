@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    {% block title %}<title>Dekiru</title>{% endblock %}
+
+</head>
+<body>
+    {% block sidebar %}
+    <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li>Profile</li>
+        <li>My Lists</li>
+        <li>Popular</li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+    </ul>
+    {% endblock sidebar %}
+
+    {% block content %}
+        Empty Page
+    {% endblock content %}
+</body>
+</html>
