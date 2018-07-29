@@ -1,0 +1,8 @@
+/.idea/
+**/migrations/**
+**.pyc
+*.pyc
+**/*.pyc
+*.sqlite3
+**.DS_Store
+**.config
