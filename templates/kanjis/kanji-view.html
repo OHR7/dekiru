@@ -6,16 +6,19 @@
     <p>{{ object.meaning }}</p>
     <p>{{ object.number }}</p>
 
-    <h2>Comments:</h2>
-    <h3>Page: {{ examples.number }}</h3>
-    {% for comment in examples %}
-        <li>{{ comment.text }}</li>
+    <h2>My Example:</h2>
+    <p>{{ my_comment.text }}</p>
+
+    <h2>Examples:</h2>
+    {% for example in examples %}
+        <li>{{ example.text }} Favorites: {{ example.favorites.count }}</li>
+        <button class="like-btn">Fav</button>
     {% endfor %}
+    <h3>Page: {{ examples.number }}</h3>
 
     <form id="add_example_form">{% csrf_token %}
         <input type="text" id="example_text">
         <label for="example_text">Example: </label>
-
         <input type="submit" value="Submit">
     </form>
 {% endblock content %}
@@ -41,6 +44,22 @@
                     console.log("success submit!!!")
                 }
             });
-        })
+        });
+
+        $(".like-btn").click(function(e){
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/kanjis/favorite-example-toggle/',
+                data: {
+                    text: $('#example_text').val(),
+                    kanji_example_id: "1",
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function () {
+                    console.log("success submit!!!")
+                }
+            })
+        });
     </script>
 {% endblock js_scripts %}
