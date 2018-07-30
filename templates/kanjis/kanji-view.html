@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ object.character }}</h1>
+    <p>{{ object.content }}</p>
+    <p>{{ object.meaning }}</p>
+    <p>{{ object.number }}</p>
+
+    <h2>Comments:</h2>
+    <h3>Page: {{ examples.number }}</h3>
+    {% for comment in examples %}
+        <li>{{ comment.text }}</li>
+    {% endfor %}
+
+    <form id="add_example_form">{% csrf_token %}
+        <input type="text" id="example_text">
+        <label for="example_text">Example: </label>
+
+        <input type="submit" value="Submit">
+    </form>
+{% endblock content %}
+
+
+{% block js_imports %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block js_scripts %}
+    <script>
+        $(document).on('submit', '#add_example_form', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/kanjis/add-example/',
+                data: {
+                    text: $('#example_text').val(),
+                    kanji: "1",
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function () {
+                    console.log("success submit!!!")
+                }
+            });
+        })
+    </script>
+{% endblock js_scripts %}

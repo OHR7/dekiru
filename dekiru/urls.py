@@ -20,6 +20,9 @@ urlpatterns = [
 	path('admin/', admin.site.urls),
 	path('', include('django.contrib.auth.urls')),
 
+	# Kanjis URL's
+	path('kanjis/', include('kanjis.urls')),
+
 	# Pages URL's
 	path('', include('pages.urls')),
 

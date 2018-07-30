@@ -1,6 +1,7 @@
 from .base import *
 
 INSTALLED_APPS += [
+    'kanjis',
 	'pages',
 	'profiles',
 ]
