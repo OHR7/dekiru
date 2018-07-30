@@ -24,8 +24,16 @@ class ItemView(View):
 	def dispatch(self, request, *args, **kwargs):
 		self.item = self.get_item()
 		self.examples = self.get_examples()
+		self.best_examples = self.get_best_examples()
 		self.my_comment = self.get_my_comment()
-		paginator = Paginator(self.examples, 2)
+
+		self.init_all_paginator()
+		self.init_best_paginator()
+
+		return super().dispatch(request, *args, **kwargs)
+
+	def init_all_paginator(self):
+		paginator = Paginator(self.examples, 5)
 		page = self.request.GET.get('page')
 		try:
 			self.examples_page = paginator.page(page)
@@ -33,7 +41,16 @@ class ItemView(View):
 			self.examples_page = paginator.page(1)
 		except EmptyPage:
 			self.examples_page = paginator.page(paginator.num_pages)
-		return super().dispatch(request, *args, **kwargs)
+
+	def init_best_paginator(self):
+		paginator = Paginator(self.best_examples, 5)
+		page = self.request.GET.get('bests_page')
+		try:
+			self.best_examples_page = paginator.page(page)
+		except PageNotAnInteger:
+			self.best_examples_page = paginator.page(1)
+		except EmptyPage:
+			self.best_examples_page = paginator.page(paginator.num_pages)
 
 	def get_item(self):
 		pk = self.kwargs.get('pk')
@@ -55,10 +72,22 @@ class ItemView(View):
 
 	def get_context_data(self, **kwargs):
 		"""Get the queryset's for object and examples lists and added it to context"""
-		context = {'object': self.item, 'examples': self.examples_page, 'my_comment': self.my_comment}
+		context = {
+			'object': self.item,
+			'examples': self.examples_page,
+			'best_examples': self.best_examples_page,
+			'my_comment': self.my_comment,
+		}
 		context.update(kwargs)
 		return context
 
 	def get(self, request, *args, **kwargs):
 		context = self.get_context_data()
 		return render(request, self.template_name, context)
+
+	def get_best_examples(self):
+		examples = self.examples_model.objects.filter(item=self.item)
+		examples = examples.filter(favorites__isnull=False)
+		# Paginator need a queryset ordered
+		examples = examples.order_by('favorites')
+		return examples

@@ -12,9 +12,16 @@
     <h2>Examples:</h2>
     {% for example in examples %}
         <li>{{ example.text }} Favorites: {{ example.favorites.count }}</li>
-        <button class="like-btn">Fav</button>
+        <button class="like-btn" id="{{ example.id }}">Fav</button>
     {% endfor %}
     <h3>Page: {{ examples.number }}</h3>
+
+    <h2>Best Examples:</h2>
+    {% for best_example in best_examples %}
+        <li>{{ best_example.text }} Favorites: {{ best_example.favorites.count }}</li>
+        <button class="like-btn" id="{{ best_example.id }}">Fav</button>
+    {% endfor %}
+    <h3>Page: {{ best_examples.number }}</h3>
 
     <form id="add_example_form">{% csrf_token %}
         <input type="text" id="example_text">
@@ -48,12 +55,13 @@
 
         $(".like-btn").click(function(e){
             e.preventDefault();
+            console.log(e.target.id);
             $.ajax({
                 type: 'POST',
                 url: '/kanjis/favorite-example-toggle/',
                 data: {
                     text: $('#example_text').val(),
-                    kanji_example_id: "1",
+                    kanji_example_id: e.target.id,
                     csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
                 },
                 success:function () {
