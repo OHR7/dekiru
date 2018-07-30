@@ -37,6 +37,7 @@
 
 {% block js_scripts %}
     <script>
+        let item_id = "{{ object.id }}";
         $(document).on('submit', '#add_example_form', function (e) {
             e.preventDefault();
             $.ajax({
@@ -44,11 +45,11 @@
                 url: '/kanjis/add-example/',
                 data: {
                     text: $('#example_text').val(),
-                    kanji: "1",
+                    item_id: item_id,
                     csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
                 },
                 success:function () {
-                    console.log("success submit!!!")
+                    console.log("success submit!!!");
                 }
             });
         });
@@ -61,7 +62,7 @@
                 url: '/kanjis/favorite-example-toggle/',
                 data: {
                     text: $('#example_text').val(),
-                    kanji_example_id: e.target.id,
+                    example_id: e.target.id,
                     csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
                 },
                 success:function () {

@@ -7,6 +7,6 @@ urlpatterns = [
 	path('<int:pk>/', views.KanjiView.as_view(), name='kanji-view'),
 
 	# Ajax Views
-	path('add-example/', views.create_example, name='add-example'),
-	path('favorite-example-toggle/', views.favorite_example_toggle, name='favorite-example-toggle'),
+	path('add-example/', views.CreateKanjiExample.as_view(), name='add-kanji-example'),
+	path('favorite-example-toggle/', views.FavoriteKanjiExampleToggle.as_view(), name='favorite-kanji-example-toggle'),
 ]
