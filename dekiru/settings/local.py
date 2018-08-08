@@ -27,7 +27,8 @@ TEMPLATES = [
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_root")
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    '/var/www/static/',
+    os.path.join(os.path.dirname(BASE_DIR), "static"),
 ]

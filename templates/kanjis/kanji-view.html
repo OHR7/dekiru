@@ -1,39 +1,113 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/kanjis/kanji-view.css' %}">
+{% endblock style %}
 
 {% block content %}
-    <h1>{{ object.character }}</h1>
-    <p>{{ object.content }}</p>
-    <p>{{ object.meaning }}</p>
-    <p>{{ object.number }}</p>
 
-    <h2>My Example:</h2>
-    <p>{{ my_comment.text }}</p>
+  {% comment %}card element{% endcomment %}
+  <div class="row justify-content-center mt-5">
+    <div class="col-6">
+      <div class="card border-primary mb-3">
+        <div class="card-body text-primary">
 
-    <h2>Examples:</h2>
-    {% for example in examples %}
-        <li>{{ example.text }}
-            Favorites: {{ example.favorites.count }}
-            Author: {{ example.profile }}
-        </li>
-        <button class="like-btn" id="{{ example.id }}">Fav</button>
-    {% endfor %}
-    <h3>Page: {{ examples.number }}</h3>
+          <div class="row justify-content-center">
+            <div class="text-center">
+              <h1 class="d-flex align-content-lg-start">
+                <small >#{{ object.number }} &nbsp;</small>
+                {{ object.character }}
+              </h1>
+            </div>
+          </div>
 
-    <h2>Best Examples:</h2>
-    {% for best_example in best_examples %}
-        <li>{{ best_example.text }}
-            Favorites: {{ best_example.favorites.count }}
-            Author: {{ example.profile }}
-        </li>
-        <button class="like-btn" id="{{ best_example.id }}">Fav</button>
-    {% endfor %}
-    <h3>Page: {{ best_examples.number }}</h3>
+          <div class="row justify-content-center">
+            <div class="text-center">
+              <p>{{ object.meaning }}</p>
+            </div>
+          </div>
 
-    <form id="add_example_form">{% csrf_token %}
-        <input type="text" id="example_text">
-        <label for="example_text">Example: </label>
-        <input type="submit" value="Submit">
-    </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %}card element{% endcomment %}
+
+  <div class="row justify-content-center mt-3">
+    <div class="col-8 text-center">
+      <form class="form-inline justify-content-center" id="add_example_form">{% csrf_token %}
+        <label class="mb-2" for="example_text">Example: &nbsp; </label>
+        <input class="form-control mb-2 mr-2" type="text" id="example_text">
+        <input class="btn btn-primary mb-2" type="submit" value="Submit">
+      </form>
+    </div>
+  </div>
+  <div class="row justify-content-center mt-3">
+    <div class="col-8">
+      <div class="accordion" id="accordionExample">
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseThree">
+                Mi Ejemplo
+              </button>
+            </h5>
+          </div>
+          <div id="collapseOne" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+              <p>{{ my_comment.text }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseThree">
+                Ejemplos
+              </button>
+            </h5>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+              {% for example in examples %}
+                <li>{{ example.text }}
+                  Favorites: {{ example.favorites.count }}
+                  Author: {{ example.profile }}
+                </li>
+                <button class="like-btn" id="{{ example.id }}">Fav</button>
+              {% endfor %}
+              <h3>Page: {{ examples.number }}</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Ejemplos mas populares
+              </button>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+              {% for best_example in best_examples %}
+                <li>{{ best_example.text }}
+                  Favorites: {{ best_example.favorites.count }}
+                  Author: {{ example.profile }}
+                </li>
+                <button class="like-btn" id="{{ best_example.id }}">Fav</button>
+              {% endfor %}
+              <h3>Page: {{ best_examples.number }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock content %}
 
 {% block js_scripts %}
