@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from kanjis.models import KanjiItem, KanjiExample
 from pages.views import ItemView, FavoriteExampleToggle, CreateExample
 
-
 # Create your views here.
 
 

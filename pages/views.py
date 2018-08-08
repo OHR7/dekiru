@@ -37,7 +37,7 @@ class ItemView(View):
 		self.item = self.get_item()
 		self.examples = self.get_examples()
 		self.best_examples = self.get_best_examples()
-		self.my_comment = self.get_my_comment()
+		self.my_comment = self.get_fav_or_my_comment()
 
 		self.init_all_paginator()
 		self.init_best_paginator()
@@ -69,14 +69,25 @@ class ItemView(View):
 		obj = self.object_model.objects.get(pk=pk)
 		return obj
 
-	def get_my_comment(self):
+	def get_fav_or_my_comment(self):
 		try:
-			comment = self.examples_model.objects.get(profile=self.request.user.profile, item=self.item)
+			comment = self.examples_model.objects.get(favorites=self.request.user.profile)
 		except MultipleObjectsReturned as e:
-			comment = self.examples_model.objects.filter(profile=self.request.user.profile, item=self.item).first()
+			print(e)
+			comment = self.examples_model.objects.filter(favorites__profile=self.request.user.profile).first()
 		except ObjectDoesNotExist as e:
-			comment = None
+			print("No Favorite Comment yet.")
+			try:
+				comment = self.examples_model.objects.get(profile=self.request.user.profile, item=self.item)
+			except MultipleObjectsReturned as e:
+				print(e)
+				comment = self.examples_model.objects.filter(profile=self.request.user.profile, item=self.item).first()
+			except ObjectDoesNotExist as e:
+				print("No Comment yet.")
+				comment = None
 		return comment
+
+
 
 	def get_examples(self):
 		examples = self.examples_model.objects.filter(item=self.item)

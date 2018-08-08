@@ -11,14 +11,20 @@
 
     <h2>Examples:</h2>
     {% for example in examples %}
-        <li>{{ example.text }} Favorites: {{ example.favorites.count }}</li>
+        <li>{{ example.text }}
+            Favorites: {{ example.favorites.count }}
+            Author: {{ example.profile }}
+        </li>
         <button class="like-btn" id="{{ example.id }}">Fav</button>
     {% endfor %}
     <h3>Page: {{ examples.number }}</h3>
 
     <h2>Best Examples:</h2>
     {% for best_example in best_examples %}
-        <li>{{ best_example.text }} Favorites: {{ best_example.favorites.count }}</li>
+        <li>{{ best_example.text }}
+            Favorites: {{ best_example.favorites.count }}
+            Author: {{ example.profile }}
+        </li>
         <button class="like-btn" id="{{ best_example.id }}">Fav</button>
     {% endfor %}
     <h3>Page: {{ best_examples.number }}</h3>
@@ -29,11 +35,6 @@
         <input type="submit" value="Submit">
     </form>
 {% endblock content %}
-
-
-{% block js_imports %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-{% endblock %}
 
 {% block js_scripts %}
     <script>
