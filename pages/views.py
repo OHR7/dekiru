@@ -2,7 +2,7 @@
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -34,7 +34,11 @@ class ItemView(View):
 	item_type = None
 
 	def dispatch(self, request, *args, **kwargs):
-		self.item = self.get_item()
+		try:
+			self.item = self.get_item()
+		except ObjectDoesNotExist as e:
+			return redirect('login')
+
 		self.examples = self.get_examples()
 		self.best_examples = self.get_best_examples()
 		self.my_comment = self.get_fav_or_my_comment()
@@ -72,22 +76,12 @@ class ItemView(View):
 	def get_fav_or_my_comment(self):
 		try:
 			comment = self.examples_model.objects.get(favorites=self.request.user.profile)
-		except MultipleObjectsReturned as e:
-			print(e)
-			comment = self.examples_model.objects.filter(favorites__profile=self.request.user.profile).first()
-		except ObjectDoesNotExist as e:
-			print("No Favorite Comment yet.")
+		except ObjectDoesNotExist:
 			try:
 				comment = self.examples_model.objects.get(profile=self.request.user.profile, item=self.item)
-			except MultipleObjectsReturned as e:
-				print(e)
-				comment = self.examples_model.objects.filter(profile=self.request.user.profile, item=self.item).first()
-			except ObjectDoesNotExist as e:
-				print("No Comment yet.")
+			except ObjectDoesNotExist:
 				comment = None
 		return comment
-
-
 
 	def get_examples(self):
 		examples = self.examples_model.objects.filter(item=self.item)
